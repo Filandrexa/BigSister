@@ -85,7 +85,8 @@ namespace BigSister
         private int MilesInput()
         {
             Console.Write("3. Light miles traveled: ");
-            var input = Console.ReadLine().Trim().Split('_', StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
+            var separator = new char[] { '_', ',', '.'};
+            var input = Console.ReadLine().Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
             var milesBool = int.TryParse(input, out int lightMiles);
 
             while (!milesBool || lightMiles <= 0)
