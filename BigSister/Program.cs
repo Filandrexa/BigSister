@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BigSister
 {
@@ -6,18 +7,20 @@ namespace BigSister
     {
         static void Main(string[] args)
         {
-            string[] types = new string[]{ "Cargo", "Family" };
-            StartUpPoint startUpPoint = new StartUpPoint(types);
-            Calculator calculator = new Calculator();
+            Dictionary<string, Ship> ships = new Dictionary<string, Ship>();
+            ships.Add("cargo", new Ship("Cargo", 10000, 1000, 736));
+            ships.Add("family", new Ship("Family", 5000, 100, 355));
 
+            StartUpPoint startUpPoint = new StartUpPoint(ships);
+            
             Console.WriteLine("Welcome to Big Sister's tax collection system. Please input the needed parameters:");
             var calculateNewTax = true;
 
             while (calculateNewTax)
             {
                 var ship = startUpPoint.GreetingAndInputData();
-                startUpPoint.CalculatedTaxes(calculator.TaxCalculated(ship));
-                calculateNewTax = startUpPoint.CalculateNew();
+                Console.WriteLine($"Taxes to pay Big Sister for {ship.type}: {ship.Taxes()} DVS");
+                calculateNewTax = startUpPoint.NewCalculate();
             }
         }
     }
