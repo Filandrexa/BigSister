@@ -2,28 +2,77 @@
 {
     public class Ship
     {
-        public readonly string type;
+        public readonly string Type;
 
-        private readonly int initialTax;
+        private int InitialTax;
 
-        private readonly int lightMilesCoefficient;
+        private int LightMilesCoefficient;
 
-        private readonly int yearlyCoefficient;
+        private int YearlyCoefficient;
+
+        private int YearOfPurchase;
+
+        private int YearOfTax;
+
+        private int LightMiles;
 
         public Ship(string type, int initialTax, int lightMilesCoefficient, int yearlyCoefficient)
         {
-            this.type = type;
-            this.initialTax = initialTax;
-            this.lightMilesCoefficient = lightMilesCoefficient;
-            this.yearlyCoefficient = yearlyCoefficient;
+            this.Type = type;
+            this.InitialTax = initialTax;
+            this.LightMilesCoefficient = lightMilesCoefficient;
+            this.YearlyCoefficient = yearlyCoefficient;
         }
 
-        public int yearOfPurchase { get; set; }
+        public bool yearOfPurchase(string year)
+        {
+            var yearOfPurchaseBool = int.TryParse(year, out int yearOfPurchase);
 
-        public int yearOfTax { get; set; }
+            if (yearOfPurchaseBool && yearOfPurchase >= 0)
+            {
+                YearOfPurchase = yearOfPurchase;
+                return true;
+            }
 
-        public int lightMiles { get; set; }
+            return false;
+        }
 
-        public int Taxes() => initialTax + lightMiles * lightMilesCoefficient - (yearOfTax - yearOfPurchase) * yearlyCoefficient;
+        public bool yearOfTax(string year) 
+        {
+            var yearOfTaxBool = int.TryParse(year, out int yearOfTax);
+
+            if (yearOfTaxBool && yearOfTax >= 0 && yearOfTax >= YearOfPurchase)
+            {
+                YearOfTax = yearOfTax;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool lightMiles(string miles)
+        {
+            var lightMilesBool = int.TryParse(miles, out int lightMiles);
+
+            if (lightMilesBool && lightMiles >= 0)
+            {
+                LightMiles = lightMiles;
+                return true;
+            }
+
+            return false;
+        }
+
+        public int Taxes()
+        {
+           var taxes = InitialTax + LightMiles * LightMilesCoefficient - (YearOfTax - YearOfPurchase) * YearlyCoefficient;
+
+           if (taxes < 0)
+           {
+                return 0;
+           }
+
+           return taxes;
+        }
     }
 }

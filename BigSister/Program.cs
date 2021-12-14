@@ -19,7 +19,7 @@ namespace BigSister
             while (calculateNewTax)
             {
                 var ship = startUpPoint.GreetingAndInputData();
-                Console.WriteLine($"Taxes to pay Big Sister for {ship.type} ship: {ship.Taxes()} DVS");
+                Console.WriteLine($"Taxes to pay Big Sister for {ship.Type} ship: {ship.Taxes()} DVS");
                 calculateNewTax = startUpPoint.NewCalculate();
             }
         }

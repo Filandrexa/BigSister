@@ -16,9 +16,9 @@ namespace BigSister
         public Ship GreetingAndInputData()
         {
             var ship = ShipInput();
-            ship.yearOfPurchase = YearOfPurchaseInput();
-            ship.yearOfTax = YearOfTaxInput(ship.yearOfPurchase);
-            ship.lightMiles = MilesInput();
+            YearOfPurchaseInput(ship);
+            YearOfTaxInput(ship);
+            MilesInput(ship);
 
             return ship;
         }
@@ -26,7 +26,7 @@ namespace BigSister
         public bool NewCalculate()
         {
             Console.WriteLine("Would you like to calculate again? 'Yes/No' ");
-            var input = Console.ReadLine().Trim();
+            var input = ReadInput();
 
             if (input.ToLower() == "yes")
             {
@@ -36,67 +36,66 @@ namespace BigSister
             return false;
         }
 
-        private Ship ShipInput() 
+        public Ship ShipInput() 
         {
             Console.Write("1. Type of ship: ");
-            var ship = Console.ReadLine().Trim();
+            var ship = ReadInput();
 
             while (!ships.ContainsKey(ship.ToLower()))
             {
                 Console.Write($"'{ship}' is not a valid input, please use '{String.Join(", ", ships.Keys)}': ");
-                ship = Console.ReadLine().Trim();
+                ship = ReadInput();
             }
 
-            return ships[ship];
+            return ships[ship.ToLower()];
         }
 
-        private int YearOfPurchaseInput()
+        public void YearOfPurchaseInput(Ship ship)
         {
             Console.Write("2. Year of purchase: ");
-            var input = Console.ReadLine().Trim();
-            var yearOfPurchaseBool = int.TryParse(input, out int yearOfPurchase);
-
-            while (!yearOfPurchaseBool || yearOfPurchase <= 0)
+            var input = ReadInput();
+            var flag = ship.yearOfPurchase(input);
+            
+            while (!flag)
             {
                 Console.Write($"'{input}' is not a valid input, please input year of purchase: ");
-                input = Console.ReadLine().Trim();
-                yearOfPurchaseBool = int.TryParse(input, out yearOfPurchase);
+                input = ReadInput();
+                flag = ship.yearOfPurchase(input);
             }
-
-            return yearOfPurchase;
         }
 
-        private int YearOfTaxInput(int yearOfPurchase)
+        public void YearOfTaxInput(Ship ship)
         {
             Console.Write("3. Year of tax calculation: ");
-            var input = Console.ReadLine().Trim();
-            var yearOfTaxBool = int.TryParse(input, out int yearOfTax);
+            var input = ReadInput();
+            var flag = ship.yearOfTax(input);
 
-            while (!yearOfTaxBool || yearOfTax <= 0 || yearOfTax < yearOfPurchase)
+            while (!flag)
             {
                 Console.Write($"'{input}' is not a valid input, please input year of tax calculation: ");
-                input = Console.ReadLine().Trim();
-                yearOfTaxBool = int.TryParse(input, out yearOfTax);
+                input = ReadInput();
+                flag = ship.yearOfTax(input);
             }
-
-            return yearOfTax;
         }
 
-        private int MilesInput()
+        public void MilesInput(Ship ship)
         {
             Console.Write("3. Light miles traveled: ");
             var separator = new char[] { '_', ',', '.'};
-            var input = Console.ReadLine().Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
-            var milesBool = int.TryParse(input, out int lightMiles);
+            var input = ReadInput().Split(separator, StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
+            var flag = ship.lightMiles(input);
 
-            while (!milesBool || lightMiles <= 0)
+            while (!flag)
             {
                 Console.Write($"'{input}' is not a valid input, please input light miles traveled: ");
-                input = Console.ReadLine().Trim().Split('_', StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
-                milesBool = int.TryParse(input, out lightMiles);
+                input = ReadInput().Split('_', StringSplitOptions.RemoveEmptyEntries).ToArray()[0];
+                flag = ship.lightMiles(input);
             }
+        }
 
-            return lightMiles;
+        public string ReadInput() 
+        {
+            return Console.ReadLine().Trim();
         }
     }
 }
